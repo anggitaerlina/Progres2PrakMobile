@@ -43,7 +43,7 @@ class _CartListProductState extends State<CartListProduct> {
         padding: const EdgeInsets.all(8.0),
         child: cartBox.isEmpty
             ? Center(
-          child: Text('No data'),
+          child: Text('Tidak ada data produk'),
         )
             : ListView.builder(
           itemCount: cartBox.length,
@@ -55,7 +55,7 @@ class _CartListProductState extends State<CartListProduct> {
                 cartBox.deleteAt(index);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Product deleted from cart'),
+                    content: Text('Produk dihapus dari favorit'),
                     backgroundColor: Colors.red,
                     duration: Duration(seconds: 1),
                   ),

@@ -50,76 +50,76 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.pink[300],
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Product Catalogue',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.pink[300],
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Aplikasi Katalog Produk',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: PageView(
-          controller: _pageController,
-          children: [
-            buildEcommerceData(),
-            CartListProduct(),
-            MyProfile(),
+        body: SafeArea(
+          child: PageView(
+            controller: _pageController,
+            children: [
+              buildEcommerceData(),
+              CartListProduct(),
+              MyProfile(),
+            ],
+            onPageChanged: (int index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.pink[50],
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home, size: 30),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_border, size: 30),
+              label: 'Produk favorit',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person, size: 30),
+              label: 'Profile',
+            ),
           ],
-          onPageChanged: (int index) {
+          onTap: (int index) {
             setState(() {
               _selectedIndex = index;
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+              );
             });
           },
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.pink[50],
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home, size: 30),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border, size: 30),
-            label: 'Shopping Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person, size: 30),
-            label: 'Profile',
-          ),
-        ],
-        onTap: (int index) {
-          setState(() {
-            _selectedIndex = index;
-            _pageController.animateToPage(
-              index,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-            );
-          });
-        },
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.pink[400],
-        unselectedItemColor: Colors.pink[200],
-        selectedFontSize: 14,
-        unselectedFontSize: 14,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-      )
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.pink[400],
+          unselectedItemColor: Colors.pink[200],
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          type: BottomNavigationBarType.fixed,
+        )
     );
   }
 
@@ -127,7 +127,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return ListView(
       physics: BouncingScrollPhysics(),
       children: [
-        SizedBox(height: 20),
+        SizedBox(
+            height: 20
+        ),
         FutureBuilder<List<EcommerceData>>(
           future: futureEcommerceData,
           builder: (context, snapshot) {
@@ -155,6 +157,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       },
                       child: Container(
+                        height: 300,
+                        width: 250,// Set the desired height here
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(15),
@@ -171,8 +175,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
-                              width: 120,
-                              height: 150,
+                              width: 60,
+                              height: 100,
                               decoration: BoxDecoration(
                                 color: Colors.pink[200],
                                 borderRadius: BorderRadius.circular(5),

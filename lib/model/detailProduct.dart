@@ -26,7 +26,7 @@ class _DetailProductState extends State<DetailProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Details'),
+        title: Text('Detail Produk'),
         backgroundColor: Colors.pink[300],
       ),
       body: SingleChildScrollView(
@@ -93,7 +93,7 @@ class _DetailProductState extends State<DetailProduct> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Description:',
+                    'Deskripsi:',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -130,7 +130,7 @@ class _DetailProductState extends State<DetailProduct> {
           );
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Product added to cart'),
+              content: Text('Produk ditambahkan ke favorit'),
               backgroundColor: Colors.pink[100],
               duration: Duration(seconds: 1),
             ),

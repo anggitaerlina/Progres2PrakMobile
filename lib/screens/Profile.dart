@@ -1,12 +1,14 @@
+import 'dart:async';
 import 'dart:io';
-import 'package:ecommerce_app/sign/login.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../sign/login.dart';
+
+
 class MyProfile extends StatefulWidget {
-  const MyProfile({Key? key});
+  const MyProfile({Key? key}) : super(key: key);
 
   @override
   State<MyProfile> createState() => _MyProfileState();
@@ -15,7 +17,7 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   late String username;
   late SharedPreferences sharedPreferences;
-  String _imagePath = "";
+  String _imagePath = ""; // Output
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -38,13 +40,13 @@ class _MyProfileState extends State<MyProfile> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Logout'),
-          content: Text('Are you sure you want to logout?'),
+          content: Text('Apakah anda yakin untuk logout?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text('Batal'),
             ),
             TextButton(
               onPressed: () {
@@ -61,37 +63,14 @@ class _MyProfileState extends State<MyProfile> {
     );
   }
 
-  Future<void> _getImageFromCamera() async {
-    final image = await getImage(true);
-    if (image != null) {
-      saveImageFile(image);
-    }
-  }
-
-  Future<void> _getImageFromGallery() async {
-    final image = await getImage(false);
-    if (image != null) {
-      saveImageFile(image);
-    }
-  }
-
-  Future<String?> getImage(bool isCamera) async {
+  Future<String> getImage(bool isCamera) async {
     final XFile? image;
     if (isCamera) {
       image = await _picker.pickImage(source: ImageSource.camera);
     } else {
       image = await _picker.pickImage(source: ImageSource.gallery);
     }
-    return image?.path;
-  }
-
-  Future<void> saveImageFile(String imagePath) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/profile_image.jpg');
-    await file.writeAsBytes(await File(imagePath).readAsBytes());
-    setState(() {
-      _imagePath = file.path;
-    });
+    return image!.path;
   }
 
   @override
@@ -101,118 +80,126 @@ class _MyProfileState extends State<MyProfile> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(height: 30),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.pink), // Warna border
+                  borderRadius: BorderRadius.circular(8), // Sudut border
+
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+
+                    Text(
+                      'Anggita Erlina Aprilia',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      '124210034',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'May Vlawinzky Pelawi',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      '124210050',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
               SizedBox(height: 20),
-              Text(
-                'Anggita Erlina Aprilia',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 5),
-              Text(
-                '124210034',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
+
               SizedBox(height: 20),
-              Text(
-                'May Vlawinzky Pelawi',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      _imagePath = await getImage(false);
+                      setState(() {});
+                    },
+                    icon: Icon(Icons.image),
+                    label: Text('Galeri'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue[200]!, // Warna background
+                      onPrimary: Colors.white, // Warna teks
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(color: Colors.blue[200]!), // Warna border
+                      ),
+                      minimumSize: Size(150, 70), // Ukuran tombol galeri
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      _imagePath = await getImage(true);
+                      setState(() {});
+                    },
+                    icon: Icon(Icons.camera_alt),
+                    label: Text('Kamera'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.purple[200]!, // Warna background
+                      onPrimary: Colors.white, // Warna teks
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(color: Colors.purple[200]!), // Warna border
+                      ),
+                      minimumSize: Size(150, 70), // Ukuran tombol kamera
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 5),
-              Text(
-                '124210050',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 50),
+              SizedBox(height: 60),
+              _imagePath.isEmpty ? Container() : Image.file(File(_imagePath), height: 300, width: 300),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    // Camera button
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          _getImageFromCamera();
-                        },
-                        icon: Icon(Icons.camera),
-                        label: Text('Camera',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          minimumSize:
-                          Size(double.infinity, 50), // Set button height
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                    // Gallery button
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          _getImageFromGallery();
-                        },
-                        icon: Icon(Icons.image),
-                        label: Text('Gallery',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          minimumSize:
-                          Size(double.infinity, 50), // Set button height
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                    // Logout button
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
                           _logout();
                         },
-                        child: Text('Logout',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            )),
+                        child: Text(
+                          'Logout',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.red,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          minimumSize:
-                          Size(double.infinity, 50), // Set button height
+                          minimumSize: Size(double.infinity, 50),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 30),
-              // Display selected image
-              _imagePath.isEmpty
-                  ? Container()
-                  : Image.file(File(_imagePath), height: 300, width: 300),
             ],
           ),
         ),
